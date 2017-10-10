@@ -5,7 +5,8 @@ create table items (
   id integer primary key autoincrement,
   title text not null,
   price real not null,
-  image_link text
+  image_link text,
+  color text
 );
 
 drop table if exists transactions;

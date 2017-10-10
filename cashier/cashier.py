@@ -73,7 +73,7 @@ def add_item():
                [request.form['title'], float(request.form['price']),
                 request.form['image_link'], request.form['color']])
     db.commit()
-    flash('New entry was successfully posted')
+    flash('New item was successfully added.')
     return redirect(url_for('show_items'))
 
 

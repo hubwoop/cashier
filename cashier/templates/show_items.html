@@ -11,7 +11,7 @@
         <dd><input type=file name=image_link size=30>
         <dt>Color:
         <dd><input type=color name=color size=30>
-        <dd><input type=submit value=Share>
+        <dd><input type=submit value=Add>
       </dl>
     </form>
   {% endif %}
@@ -27,9 +27,9 @@
         <dt>Image Link
         <dd>{{ item.image_link }}
         <dt>Color
-        <dd>{{ item.color|safe }}
+        <dd>{{ item.color|safe }}</dd>
   {% else %}
-    <li><em>Unbelievable.  No entries here so far</em>
+    <li><em>Unbelievable.  No items here so far</em>
   {% endfor %}
   </ul>
 {% endblock %}
