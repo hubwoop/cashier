@@ -1,0 +1,1 @@
+from .cashier import app

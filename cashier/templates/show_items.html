@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if session.logged_in %}
+    <form action="{{ url_for('add_item') }}" method=post class=add-entry>
+      <dl>
+        <dt>Title:
+        <dd><input type=text size=30 name=title>
+        <dt>Price:
+        <dd><input type=text name=price size=30>
+        <dt>Image Link:
+        <dd><input type=file name=image_link size=30>
+        <dt>Color:
+        <dd><input type=color name=color size=30>
+        <dd><input type=submit value=Share>
+      </dl>
+    </form>
+  {% endif %}
+  <ul class=entries>
+  {% for item in items %}
+    <li>
+        <dt>ID
+        <dd>{{ item.id }}
+        <dt>Title
+        <dd>{{ item.title }}
+        <dt>Price
+        <dd>{{ item.price }}
+        <dt>Image Link
+        <dd>{{ item.image_link }}
+        <dt>Color
+        <dd>{{ item.color|safe }}
+  {% else %}
+    <li><em>Unbelievable.  No entries here so far</em>
+  {% endfor %}
+  </ul>
+{% endblock %}
