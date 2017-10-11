@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block body %}
+  {% if session.logged_in %}
+  <div class=items>
+  {% for item in items %}
+  <div style="background-color: {{ item.color|safe }};">
+  <span style="color: white;">{{ item.title }}</span>
+  </div>
+  {% else %}
+  <div><em>Unbelievable.  No items here so far</em></div>
+  {% endfor %}
+  {% endif %}
+
+  </div>
+{% endblock %}
