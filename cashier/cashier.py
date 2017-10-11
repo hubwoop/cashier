@@ -80,8 +80,10 @@ def add_item():
         # check if the file part contains a value and is allowed
         if file.filename != '' and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['PATH_TO_ITEM_IMAGES'], filename))
-
+            try:
+                file.save(os.path.join(app.config['PATH_TO_ITEM_IMAGES'], filename))
+            except FileNotFoundError:
+                os.mkdir(os.path.join(app.root_path, 'images'))
     db = get_db()
     db.execute('insert into items (title, price, image_link, color) values (?, ?, ?, ?)',
                [request.form['title'], price, filename, request.form['color']])
