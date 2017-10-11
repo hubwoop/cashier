@@ -8,7 +8,7 @@ A simple cashier UI that runs in web-browsers
 - (optional) Create and activate virtualenv
 - Install requirements: ```pip install -r /path/to/requirements.txt```
 - Install cashier ```pip install --editable .```
-- Export environment variables: FLASK_APP=cashier, FLASK_DEBUG=true
+- Export environment variables: ```FLASK_APP=cashier```, ```FLASK_DEBUG=true```
 - Create DB: ```flask initdb```
 - ```flask run```
 
