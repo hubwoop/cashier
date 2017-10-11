@@ -1,0 +1,6 @@
+.idea/
+cashier.egg-info/
+cashier/__pycache__/
+cashier/cashier.db
+cashier/images/
+run.sh
