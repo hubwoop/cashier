@@ -9,6 +9,7 @@
 <div class=page>
   <h1>Cashier</h1>
   <div class=metanav>
+  <a href="{{ url_for('show_items') }}">Modify Items</a>
   <a href="{{ url_for('work_view') }}">Work</a>
   {% if not session.logged_in %}
     <a href="{{ url_for('login') }}">log in</a>

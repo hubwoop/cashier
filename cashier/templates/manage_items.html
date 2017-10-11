@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
 {% block body %}
   {% if session.logged_in %}
-    <form action="{{ url_for('add_item') }}" method=post class=add-entry>
+    <form action="{{ url_for('add_item') }}" method=post class=add-entry enctype=multipart/form-data>
       <dl>
         <dt>Title:
         <dd><input size=30 name=title>
         <dt>Price:
         <dd><input name=price size=30>
         <dt>Image Link:
-        <dd><input type=file name=image_link size=30>
+        <dd><input type=file name=file size=30>
         <dt>Color:
-        <dd><input type=color name=color size=30>
+        <dd><input type=color name=color size=30 value="#ffffff">
         <dd><input type=submit value=Add>
       </dl>
     </form>
