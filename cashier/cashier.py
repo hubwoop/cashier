@@ -61,7 +61,7 @@ def show_items():
     db = get_db()
     cur = db.execute('select id, title, price, image_link, color from items order by id desc')
     items = cur.fetchall()
-    return render_template('show_items.html', items=items)
+    return render_template('manage_items.html', items=items)
 
 
 @app.route('/add/item', methods=['POST'])
@@ -97,6 +97,15 @@ def logout():
     session.pop('logged_in', None)
     flash('You were logged out')
     return redirect(url_for('show_items'))
+
+
+@app.route('/work')
+def work_view():
+    db = get_db()
+    cur = db.execute('select id, title, price, image_link, color from items order by id desc')
+    items = cur.fetchall()
+    return render_template('work_view.html', items=items)
+
 
 
 def print_receipt(data):
