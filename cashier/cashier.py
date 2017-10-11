@@ -72,7 +72,7 @@ def add_item():
     if not session.get('logged_in'):
         abort(401)
     price = float(request.form['price'])
-
+    color = request.form['color']
     filename = None
     # check if the post request has the file part
     if 'file' in request.files:
@@ -84,11 +84,23 @@ def add_item():
                 file.save(os.path.join(app.config['PATH_TO_ITEM_IMAGES'], filename))
             except FileNotFoundError:
                 os.mkdir(os.path.join(app.root_path, 'static', 'images'))
+                file.save(os.path.join(app.config['PATH_TO_ITEM_IMAGES'], filename))
+            color = None
     db = get_db()
     db.execute('insert into items (title, price, image_link, color) values (?, ?, ?, ?)',
-               [request.form['title'], price, filename, request.form['color']])
+               [request.form['title'], price, filename, color])
     db.commit()
     flash('New item was successfully added.')
+    return redirect(url_for('show_items'))
+
+
+@app.route('/delete/item/<identifier>/')
+def delete_item(identifier):
+    if not session.get('logged_in'):
+        abort(401)
+    db = get_db()
+    db.execute('delete from items where id = (?)', [identifier])
+    db.commit()
     return redirect(url_for('show_items'))
 
 

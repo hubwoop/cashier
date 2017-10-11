@@ -18,7 +18,7 @@
 
   <ul class=entries>
   {% for item in items %}
-    <li>
+      <dl>
         <dt>ID
         <dd>{{ item.id }}
         <dt>Title
@@ -29,8 +29,11 @@
         <dd>{{ item.image_link }}
         <dt>Color
         <dd>{{ item.color|safe }}</dd>
+        <dt>Delete
+        <dd><a href="{{ url_for('delete_item', identifier=item.id) }}">Delete</a></dd>
+      </dl>
   {% else %}
-    <li><em>Unbelievable.  No items here so far</em>
+    <em>Unbelievable.  No items here so far</em>
   {% endfor %}
   </ul>
 {% endblock %}

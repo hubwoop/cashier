@@ -86,4 +86,7 @@ h2 {
 
 .itemTitle {
     text-align: center;
+    text-shadow: 0 0 13px #ffffff;
+    font-size: large;
+    font-weight: bold;
 }
