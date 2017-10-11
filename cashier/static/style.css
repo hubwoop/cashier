@@ -71,11 +71,19 @@ h2 {
 }
 
 .items {
-  display: grid;
-  grid: repeat(2, 120px) / auto-flow 120px;
+    display: grid;
+    grid: repeat(3, 180px) / auto-flow 180px;
 }
 
 .items > div {
-  width: 80px;
-  height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    width: 140px;
+    height: 140px;
+}
+
+.itemTitle {
+    text-align: center;
 }

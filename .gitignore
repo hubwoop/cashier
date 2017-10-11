@@ -2,5 +2,5 @@
 cashier.egg-info/
 cashier/__pycache__/
 cashier/cashier.db
-cashier/images/
+cashier/static/images/
 run.sh

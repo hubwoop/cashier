@@ -1,21 +1,24 @@
 // https://codepen.io/znak/pen/aOvMOd
-contrast();
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    contrast();
+}, false);
+
 
 function contrast() {
 
-	var R, G, B, C, L;
+	var C, L, rgb;
 
-	$( "li" ).each(function() {
+	$( ".colorBlock" ).each( function() {
 
-		R = (Math.floor(Math.random() * 256));
-		G = (Math.floor(Math.random() * 256));
-		B = (Math.floor(Math.random() * 256));
+	    rgb = $(this).css('background-color');
 
-		$( this ).css( 'background-color', 'rgb(' + R + ',' + G + ',' + B + ')' );
-
-		C = [ R/255, G/255, B/255 ];
+	    C = rgb.substr(4, rgb.length-5).split(', ');
 
 		for ( var i = 0; i < C.length; ++i ) {
+
+		    C[i] = Number(C[i]) / 255;
 
 			if ( C[i] <= 0.03928 ) {
 
@@ -23,7 +26,7 @@ function contrast() {
 
 			} else {
 
-				C[i] = Math.pow( ( C[i] + 0.055 ) / 1.055, 2.4);
+				C[i] = Math.pow( ( C[i] + 0.055 ) / 1.055, 2.4 );
 
 			}
 

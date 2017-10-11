@@ -14,7 +14,7 @@ app.config.update(dict(
     SECRET_KEY='development key',
     USERNAME='admin',
     PASSWORD='default',
-    PATH_TO_ITEM_IMAGES=os.path.join(app.root_path, 'images'),
+    PATH_TO_ITEM_IMAGES=os.path.join(app.root_path, 'static', 'images'),
     ALLOWED_EXTENSIONS=ALLOWED_EXTENSIONS
 ))
 # And override config from an environment variable...
@@ -83,7 +83,7 @@ def add_item():
             try:
                 file.save(os.path.join(app.config['PATH_TO_ITEM_IMAGES'], filename))
             except FileNotFoundError:
-                os.mkdir(os.path.join(app.root_path, 'images'))
+                os.mkdir(os.path.join(app.root_path, 'static', 'images'))
     db = get_db()
     db.execute('insert into items (title, price, image_link, color) values (?, ?, ?, ?)',
                [request.form['title'], price, filename, request.form['color']])
