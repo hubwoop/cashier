@@ -9,11 +9,11 @@
               background-image: url('../static/images/{{ item.image_link }}');
               background-position: center;
               background-repeat: no-repeat;
-              background-size: contain;
-            ">
+              background-size: contain;"
           {% else %}
-      class="itemTitle colorBlock" style="background-color: {{ item.color|safe }}">
+      class="itemTitle colorBlock" style="background-color: {{ item.color|safe }}"
           {% endif %}
+      id={{ item.id }}>
   {{ item.title }}
   </div>
   {% else %}
@@ -22,6 +22,6 @@
   {% else %}
       <em>Not logged in.</em>
   {% endif %}
-
   </div>
+<ol id="receipt"></ol>
 {% endblock %}

@@ -1,9 +1,11 @@
+import json
 import os
 import platform
 import sqlite3
 import subprocess
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 from werkzeug.utils import secure_filename
+from collections import namedtuple
 
 app = Flask(__name__)  # create the application instance :)
 app.config.from_object(__name__)  # load config from this file, cashier.py
@@ -94,6 +96,25 @@ def add_item():
     return redirect(url_for('show_items'))
 
 
+@app.route('/get/item/<identifier>')
+def get_item(identifier):
+    try:
+        int(identifier)
+    except ValueError:
+        abort(400)
+    db = get_db()
+    cur = db.execute('select id, title, price, image_link, color from items where id = (?)', [identifier])
+    item = cur.fetchone()
+    if not item:
+        abort(400)
+    item_for_json = {'id': item[0], 'title': item[1], 'price': item[2]}
+    if item[3]:
+        item_for_json.update({'image_link': item[3]})
+    if item[4]:
+        item_for_json.update({'color': item[4]})
+    return json.dumps(item_for_json)
+
+
 @app.route('/delete/item/<identifier>/')
 def delete_item(identifier):
     if not session.get('logged_in'):
@@ -145,6 +166,10 @@ def print_receipt(data):
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+
+def dict_from_row(row):
+    return dict(zip(row.keys(), row))
 
 
 if __name__ == '__main__':
