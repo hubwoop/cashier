@@ -73,7 +73,7 @@ def show_items():
 def add_item():
     if not session.get('logged_in'):
         abort(401)
-    price = float(request.form['price'])
+    price = evaluate_price(request.form['price'])
     color = request.form['color']
     filename = None
     # check if the post request has the file part
@@ -94,6 +94,11 @@ def add_item():
     db.commit()
     flash('New item was successfully added.')
     return redirect(url_for('show_items'))
+
+
+def evaluate_price(price: str):
+    price = price.replace(',', '.')
+    return float(price)
 
 
 @app.route('/get/item/<identifier>')
