@@ -1,11 +1,29 @@
 // https://codepen.io/znak/pen/aOvMOd
 
 
-function add_item_to_receipt(identifier) {
-    $.getJSON("/get/item/" + identifier, function(result){
+function already_listed_handler(identifier) {
+
+    var already_listed = false;
+
+    $("#receipt").children().each(function () {
+        if (Number($(this).attr("data-id")) === identifier) {
+            $(this).find("[data-ammount]").text(function (i, oldText) {
+                return Number(oldText) + 1
+            });
+            already_listed = true;
+        }
+    });
+
+    return already_listed;
+}
+
+function add_new_item_to_receipt(identifier) {
+    $.getJSON("/get/item/" + identifier, function (result) {
         var receipt = $("#receipt");
         receipt.append(
-            "<li><dl><dt>Item: "
+            "<li data-id="
+            + result['id']
+            + "><dl><dt>Amount: <span data-ammount>1</span></dt><dt>Item: "
             + result['title']
             + "</dt><dd>Price: "
             + result['price']
@@ -13,12 +31,18 @@ function add_item_to_receipt(identifier) {
     });
 }
 
+function update_receipt_with(identifier) {
+    if (!already_listed_handler(identifier)){
+        add_new_item_to_receipt(identifier)
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 
     contrast();
     $('.itemTitle').click(function () {
 
-        add_item_to_receipt(Number($(this).attr('id')))
+        update_receipt_with(Number($(this).attr('id')))
 
     });
 
