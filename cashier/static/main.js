@@ -1,15 +1,20 @@
-// https://codepen.io/znak/pen/aOvMOd
 
+let receipt_state = [];
 
 function already_listed_handler(identifier) {
 
-    var already_listed = false;
+    let already_listed = false;
 
     $("#receipt").children().each(function () {
         if (Number($(this).attr("data-id")) === identifier) {
+            let new_ammount;
             $(this).find("[data-ammount]").text(function (i, oldText) {
-                return Number(oldText) + 1
+                new_ammount = Number(oldText) + 1;
+                return new_ammount
             });
+            let price = receipt_state.find(x => x.id === identifier).price;
+            console.log(price);
+            $(this).find("[data-price]").text(new_ammount*price);
             already_listed = true;
         }
     });
@@ -19,16 +24,20 @@ function already_listed_handler(identifier) {
 
 function add_new_item_to_receipt(identifier) {
     $.getJSON("/get/item/" + identifier, function (result) {
-        var receipt = $("#receipt");
+
+        let receipt = $("#receipt");
         receipt.append(
             "<li data-id="
             + result['id']
             + "><dl><dt>Amount: <span data-ammount>1</span></dt><dt>Item: "
             + result['title']
-            + "</dt><dd>Price: "
+            + "</dt><dd>Price: <span data-price>"
             + result['price']
-            + "€</dd></dl></li>");
+            + "</span>€</dd></dl></li>");
+
+        receipt_state.push(result);
     });
+
 }
 
 function update_receipt_with(identifier) {
@@ -49,17 +58,17 @@ document.addEventListener('DOMContentLoaded', function () {
 }, false);
 
 
-
+// https://codepen.io/znak/pen/aOvMOd
 function contrast() {
 
-    var C, L, rgb;
+    let C, L, rgb;
 
     $(".colorBlock").each(function () {
 
         rgb = $(this).css('background-color');
         C = rgb.substr(4, rgb.length - 5).split(', ');
 
-        for (var i = 0; i < C.length; ++i) {
+        for (let i = 0; i < C.length; ++i) {
             C[i] = Number(C[i]) / 255;
             if (C[i] <= 0.03928) {
                 C[i] = C[i] / 12.92

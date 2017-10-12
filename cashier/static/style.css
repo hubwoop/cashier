@@ -89,4 +89,6 @@ h2 {
     text-shadow: 0 0 13px #ffffff;
     font-size: large;
     font-weight: bold;
+    user-select: none;
+    cursor: pointer;
 }
