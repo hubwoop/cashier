@@ -18,7 +18,8 @@ app.config.update(dict(
     USERNAME='admin',
     PASSWORD='default',
     PATH_TO_ITEM_IMAGES=os.path.join(app.root_path, 'static', 'images'),
-    ALLOWED_EXTENSIONS=ALLOWED_EXTENSIONS
+    ALLOWED_EXTENSIONS=ALLOWED_EXTENSIONS,
+    PRINT_FILE=os.path.expanduser('~/cashier_printfile.txt')
 ))
 # And override config from an environment variable...
 # Simply define the environment variable CASHIER_SETTINGS that points to a config file to be loaded.
@@ -168,6 +169,8 @@ def work_view():
 
 def print_receipt(data):
     if platform.system() == 'Windows':
+        with open(app.config['PRINT_FILE']) as f:
+            f.write(data)
         os.startfile("C:/Users/TestFile.txt", "print")
     elif platform.system() == 'Linux':
         lpr = subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
