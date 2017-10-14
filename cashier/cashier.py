@@ -174,8 +174,8 @@ def print_receipt(data):
         os.startfile(app.config['PRINT_FILE'], "print")
     elif platform.system() == 'Linux':
         print(data)
-        # lpr = subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
-        # lpr.stdin.write(str.encode(data))
+        lpr = subprocess.run(["/dev/usb/pl0"], stdin=subprocess.PIPE)
+        lpr.stdin.write(str.encode(data))
 
 
 def allowed_file(filename):
