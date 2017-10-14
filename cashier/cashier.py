@@ -19,7 +19,7 @@ app.config.update(dict(
     PASSWORD='default',
     PATH_TO_ITEM_IMAGES=os.path.join(app.root_path, 'static', 'images'),
     ALLOWED_EXTENSIONS=ALLOWED_EXTENSIONS,
-    PRINT_FILE=os.path.expanduser('~/cashier_printfile.txt')
+    PRINT_FILE=os.path.join(os.path.expanduser('~'), 'cashier_printfile.txt')
 ))
 # And override config from an environment variable...
 # Simply define the environment variable CASHIER_SETTINGS that points to a config file to be loaded.
@@ -173,8 +173,9 @@ def print_receipt(data):
             f.write(data)
         os.startfile(app.config['PRINT_FILE'], "print")
     elif platform.system() == 'Linux':
-        lpr = subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
-        lpr.stdin.write(str.encode(data))
+        print(data)
+        # lpr = subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
+        # lpr.stdin.write(str.encode(data))
 
 
 def allowed_file(filename):
@@ -209,7 +210,7 @@ def print_kitchen_receipt():
     del receipt['sum']
     text = f"Bestellung #{customer_number%100}!\n"
     for item_id, value in receipt.items():
-        text = f"text\n{value['amount']}x {value['title']}"
+        text = f"{text}\n{value['amount']}x {value['title']}"
     print_receipt(text)
     return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
