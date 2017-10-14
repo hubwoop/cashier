@@ -152,8 +152,6 @@ document.addEventListener('DOMContentLoaded', function () {
         $.post("/add/transaction", state, function () {
              window.location.replace("/work");
         });
-
-
     });
 
     $('#returnToAddItems').click(function () {
@@ -192,11 +190,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     $('#printCustomerReceipt').click(function () {
-
+        $.post("/print/customer", JSON.stringify(receipt_state));
     });
 
     $('#printKitchenReceipt').click(function () {
-
+        $.post("/print/kitchen", JSON.stringify(receipt_state));
     });
 
 }, false);

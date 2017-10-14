@@ -3,6 +3,7 @@ import os
 import platform
 import sqlite3
 import subprocess
+import itertools
 from datetime import datetime
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 from werkzeug.utils import secure_filename
@@ -22,6 +23,7 @@ app.config.update(dict(
 # And override config from an environment variable...
 # Simply define the environment variable CASHIER_SETTINGS that points to a config file to be loaded.
 app.config.from_envvar('CASHIER_SETTINGS', silent=True)
+customer_number = 0
 
 
 @app.cli.command('initdb')
@@ -35,6 +37,8 @@ def connect_db():
     """Connects to the specific database."""
     rv = sqlite3.connect(app.config['DATABASE'])
     rv.row_factory = sqlite3.Row
+    rv.execute('PRAGMA foreign_keys = ON;')
+    rv.commit()
     return rv
 
 
@@ -154,11 +158,12 @@ def logout():
 
 @app.route('/work')
 def work_view():
+    global customer_number
     db = get_db()
     cur = db.execute('select id, title, price, image_link, color from items order by id desc')
     items = cur.fetchall()
-    cur = db.execute('select id from transactions order by id desc')
-    return render_template('work_view.html', items=items, customer=cur.lastrowid)
+    customer_number += 1
+    return render_template('work_view.html', items=items, customer=customer_number)
 
 
 def print_receipt(data):
@@ -166,7 +171,7 @@ def print_receipt(data):
         os.startfile("C:/Users/TestFile.txt", "print")
     elif platform.system() == 'Linux':
         lpr = subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
-        lpr.stdin.write(data)
+        lpr.stdin.write(str.encode(data))
 
 
 def allowed_file(filename):
@@ -179,12 +184,44 @@ def add_transaction():
     receipt = request.get_json(force=True)  # type: dict
     db = get_db()
 
-    for item_id, value in receipt.items():
-        print(f"{item_id}: {value}")
-        if item_id is 'sum':
-            db.execute('insert into transactions (date, sum) values (?, ?)',
-                       [str(datetime.now()), float(value)])
+    receipt_sum = float(receipt['sum'])
+    del receipt['sum']
+    cur = db.execute('insert into transactions (date, sum) values (?, ?)',
+                     [str(datetime.now()), receipt_sum])
+    transaction_id = cur.lastrowid
     db.commit()
+
+    for item_id, value in receipt.items():
+        for _ in itertools.repeat(None, value['amount']):
+            db.execute('insert into items_to_transactions (item, "transaction") values (?, ?)',
+                       [int(item_id), int(transaction_id)])
+    db.commit()
+    return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
+
+
+@app.route('/print/kitchen', methods=['POST'])
+def print_kitchen_receipt():
+    global customer_number
+    receipt = request.get_json(force=True)  # type: dict
+    del receipt['sum']
+    text = f"Bestellung #{customer_number%100}!\n"
+    for item_id, value in receipt.items():
+        text = text + f"{value['amount']}x {value['title']}"
+    print_receipt(text)
+    return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
+
+
+@app.route('/print/customer', methods=['POST'])
+def print_customer_receipt():
+    global customer_number
+    receipt = request.get_json(force=True)  # type: dict
+    receipt_sum = receipt['sum']
+    del receipt['sum']
+    text = f"Deine Nummer: {customer_number%100}\n"
+    for item_id, value in receipt.items():
+        text = text + f"{value['amount']}x {value['title']}"
+    text = text + "\nSumme:" + receipt_sum + "€"
+    print_receipt(text)
     return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
 
