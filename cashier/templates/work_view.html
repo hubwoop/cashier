@@ -7,9 +7,7 @@
     <div
       {% if item.image_link %}class="itemTitle"
       style="
-        background-image: url('../static/images/{{ item.image_link }}');
-        background-position: center;
-        background-repeat: no-repeat;
+        background: url('../static/images/{{ item.image_link }}') no-repeat center;
         background-size: contain;"
       {% else %}
       class="itemTitle colorBlock" style="background-color: {{ item.color|safe }}"
@@ -24,51 +22,45 @@
     <em>Not logged in.</em>
   {% endif %}
     </div>
-  <div id="finishProcessTab">
-  lololol
-    <!--
-  <div id="receivedRow"><input id="receivedSum" type="number" min="0" step="any"></div>
+<div id="finishProcessTab">
+  <div id="finishProcessTabTitle">
+    To Pay: <span id="finishSum">0</span>
+  </div>
+  <div id="receivedFromCustomerRow">
+  <div id="dialPad">
+
+    <button data-number>1</button>
+    <button data-number>4</button>
+    <button data-number>7</button>
+    <button id="decimalPoint">.</button>
+
+    <button data-number>2</button>
+    <button data-number>5</button>
+    <button data-number>8</button>
+    <button data-number>0</button>
+
+    <button data-number>3</button>
+    <button data-number>6</button>
+    <button data-number>9</button>
+    <button id="evaluateInput">=</button>
+
+  </div>
+  <button id="resetInput">Clear</button>
+  <input id="receivedSum" type="number" min="0" step="any" title="receivedSum" maxlength="8" size="8">
+  </div>
+
   <div id="finishProcessRow">
-
-
     <button id="printCustomerReceipt">Print Customer Receipt</button>
     <br>
     <button id="printKitchenReceipt">Print Kitchen Receipt</button>
     <br>
-
-    <div id="recieved" class="calculator">
-
-      <button id="clear" class="clear">C</button>
-
-      <div id="viewer" class="viewer">0</div>
-
-      <button class="num" data-num="7">7</button>
-      <button class="num" data-num="8">8</button>
-      <button class="num" data-num="9">9</button>
-      <button data-ops="plus" class="ops">+</button>
-
-      <button class="num" data-num="4">4</button>
-      <button class="num" data-num="5">5</button>
-      <button class="num" data-num="6">6</button>
-      <button data-ops="minus" class="ops">-</button>
-
-      <button class="num" data-num="1">1</button>
-      <button class="num" data-num="2">2</button>
-      <button class="num" data-num="3">3</button>
-      <button data-ops="times" class="ops">*</button>
-
-      <button class="num" data-num="0">0</button>
-      <button class="num" data-num=".">.</button>
-      <button id="equals" class="equals" data-result="">=</button>
-      <button data-ops="divided by" class="ops">/</button>
-    </div>
-    -->
     <button id="closeInteraction">Sell!</button>
   </div>
-    <div id="rightRow">
-        <ol id="receipt"></ol>
-        <div id="sumRow">Sum: <span id="sum">0</span></div>
-        <button id="finishProcess">Finish</button>
-    </div>
+</div>
+  <div id="rightRow">
+      <ol id="receipt"></ol>
+      <div id="sumRow">Sum: <span id="sum">0</span></div>
+      <button id="finishProcess">Finish</button>
   </div>
+</div>
 {% endblock %}

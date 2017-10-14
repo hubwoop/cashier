@@ -1,23 +1,23 @@
 let receipt_state = {"sum": 0};
 
 function already_listed_handler(identifier) {
-
     if (receipt_state[identifier]) {
-        const receipt_item = $("li[data-id='" + identifier + "']");
 
+        const receipt_item = $("li[data-id='" + identifier + "']");
         receipt_state[identifier]['amount'] += 1;
         const amount = receipt_state[identifier]['amount'];
-        receipt_item.find("[data-ammount]").text(amount);
 
+        receipt_item.find("[data-ammount]").text(amount);
         const price = receipt_state[identifier]['price'];
         const new_price = (amount * price).toFixed(2);
-        receipt_item.find("[data-price]").text(new_price);
 
+        receipt_item.find("[data-price]").text(new_price);
+        update_receipt_sum();
         return true;
     }
     return false;
-}
 
+}
 function update_receipt_sum() {
     let sum = 0;
     Object.keys(receipt_state).forEach(function (key, index) {
@@ -32,7 +32,10 @@ function update_receipt_sum() {
     });
     receipt_state['sum'] = sum;
     console.log(receipt_state);
-    $("#sum").text(sum.toFixed(2))
+    sum = sum.toFixed(2);
+    $("#sum").text(sum);
+    $("#finishSum").text(sum);
+
 }
 
 function add_new_item_to_receipt(identifier) {
@@ -60,38 +63,12 @@ function add_new_item_to_receipt(identifier) {
     });
 
 }
-
 function add_to_receipt(identifier) {
     if (!already_listed_handler(identifier)) {
         add_new_item_to_receipt(identifier)
     }
-    update_receipt_sum();
+
 }
-
-document.addEventListener('DOMContentLoaded', function () {
-
-    contrast();
-    $('.itemTitle').click(function () {
-
-        add_to_receipt(Number($(this).attr('id')))
-
-    });
-
-    $('#finishProcess').click(function () {
-
-        $(".items").hide();
-        $("#finishProcessTab").show();
-
-    });
-
-    $('#closeInteraction').click(function () {
-
-        $("#finishProcessTab").hide();
-        $(".items").show();
-
-    })
-
-}, false);
 
 /*
     Contrast fix by
@@ -125,3 +102,45 @@ function contrast() {
     });
 
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    contrast();
+    $('.itemTitle').click(function () {
+
+        add_to_receipt(Number($(this).attr('id')))
+
+    });
+
+    $('#finishProcess').click(function () {
+
+        $(".items").hide();
+        $("#finishProcess").hide();
+        $("#finishProcessTab").show();
+
+    });
+
+    $('#closeInteraction').click(function () {
+
+        $("#finishProcessTab").hide();
+        $("#finishProcess").show();
+        $(".items").show();
+
+    });
+
+    $('#dialPad').find(':button').click(function () {
+        console.log($(this));
+        const attr = $(this).attr('data-number');
+        const sumDisplay = $('#receivedSum');
+        if (typeof attr !== typeof undefined && attr !== false) {
+            console.log("a number!")
+            sumDisplay.val( sumDisplay.val() + $(this).text());
+        }
+        else if ($(this).is('#decimalPoint')) {
+            sumDisplay.val( sumDisplay.val() + $(this).text());
+        }
+
+
+    })
+
+}, false);

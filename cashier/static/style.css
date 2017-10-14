@@ -23,8 +23,21 @@ h2 {
 #receipt button{
     width: 100%;
     height: 2.5em;
-    border: 1px red;
+    border: 1px solid darkred;
+    color: darkred;
+    background-color: transparent;
     border-radius: 13px;
+    cursor: pointer;
+}
+
+#finishProcess {
+    width: 100%;
+    height: 2.5em;
+    border: 1px solid darkgreen;
+    color: darkgreen;
+    background-color: transparent;
+    border-radius: 13px;
+    cursor: pointer;
 }
 
 .page {
@@ -108,4 +121,42 @@ h2 {
 #finishProcessTab {
     display: None;
     flex-grow: 1;
+}
+
+#dialPad {
+    display: grid;
+    grid: repeat(4, 60px) / auto-flow 60px;
+}
+
+#dialPad > button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    width: 50px;
+    height: 50px;
+}
+
+#receivedSum {
+    width: 80px;
+    height: 40px;
+}
+
+#receivedFromCustomerRow {
+    float: left;
+}
+
+#finishProcessTabTitle {
+    margin-bottom: 20px;
+}
+
+#finishProcessRow > button {
+    width: 60%;
+    height: 2.5em;
+    border: 1px;
+    border-radius: 13px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
