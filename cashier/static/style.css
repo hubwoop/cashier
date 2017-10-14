@@ -161,6 +161,17 @@ h2 {
     text-align: center;
 }
 
+#returnToAddItems {
+    display: none;
+    width: 100%;
+    height: 2.5em;
+    border: 1px solid darkgrey;
+    color: darkgrey;
+    background-color: transparent;
+    border-radius: 13px;
+    cursor: pointer;
+}
+
 #finishProcessRow > button {
     width: 60%;
     height: 2.5em;

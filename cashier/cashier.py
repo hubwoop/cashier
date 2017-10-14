@@ -157,7 +157,8 @@ def work_view():
     db = get_db()
     cur = db.execute('select id, title, price, image_link, color from items order by id desc')
     items = cur.fetchall()
-    return render_template('work_view.html', items=items)
+    cur = db.execute('select id from transactions order by id desc')
+    return render_template('work_view.html', items=items, customer=cur.lastrowid)
 
 
 def print_receipt(data):
@@ -173,8 +174,12 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 
-def dict_from_row(row):
-    return dict(zip(row.keys(), row))
+@app.route('/add/transaction', methods=['POST'])
+def add_transaction():
+    receipt = request.get_json(force=True)  # type: dict
+    for item_id in receipt.keys():
+        print(f"{item_id}: {receipt[item_id]}")
+    return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
 
 if __name__ == '__main__':

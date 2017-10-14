@@ -18,6 +18,7 @@ function already_listed_handler(identifier) {
     return false;
 
 }
+
 function update_receipt_sum() {
     let sum = 0;
     Object.keys(receipt_state).forEach(function (key, index) {
@@ -35,8 +36,8 @@ function update_receipt_sum() {
     sum = sum.toFixed(2);
     $("#sum").text(sum);
     $("#finishSum").text(sum);
-    if($("#change").text()){
-
+    if ($("#change").text()) {
+        evaluate_input()
     }
 
 }
@@ -66,11 +67,11 @@ function add_new_item_to_receipt(identifier) {
     });
 
 }
+
 function add_to_receipt(identifier) {
     if (!already_listed_handler(identifier)) {
         add_new_item_to_receipt(identifier)
     }
-
 }
 
 /*
@@ -106,8 +107,10 @@ function contrast() {
 
 }
 
-function evaluate_input(sumDisplay, change) {
+function evaluate_input() {
 
+    let sumDisplay = $("#receivedSum");
+    let change = $("#change");
     let userInput = Number(sumDisplay.val().replace(",", "."));
 
     if (isNaN(userInput)) {
@@ -139,15 +142,25 @@ document.addEventListener('DOMContentLoaded', function () {
         $(".items").hide();
         $("#finishProcess").hide();
         $("#finishProcessTab").show();
+        $("#returnToAddItems").show();
 
     });
 
     $('#closeInteraction').click(function () {
+        const state = JSON.stringify(receipt_state);
+        console.log(state);
+        $.post("/add/transaction", state, function () {
+             window.location.replace("/work");
+        });
 
+
+    });
+
+    $('#returnToAddItems').click(function () {
         $("#finishProcessTab").hide();
+        $("#returnToAddItems").hide();
         $("#finishProcess").show();
         $(".items").show();
-
     });
 
     $('#dialPad').find(':button').click(function () {
@@ -155,27 +168,35 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log($(this));
         const attr = $(this).attr('data-number');
         const sumDisplay = $('#receivedSum');
-        const change = $('#change');
 
         if (typeof attr !== typeof undefined && attr !== false) {
-            sumDisplay.val( sumDisplay.val() + $(this).text());
+            sumDisplay.val(sumDisplay.val() + $(this).text());
         }
         else if ($(this).is('#decimalPoint')) {
-            sumDisplay.val( sumDisplay.val() + $(this).text());
+            sumDisplay.val(sumDisplay.val() + $(this).text());
         }
         else if ($(this).is('#evaluateInput')) {
             try {
-                evaluate_input(sumDisplay, change);
+                evaluate_input();
             } catch (e) {
+                console.log(e);
                 sumDisplay.val("");
                 return false;
             }
-
         }
     });
 
     $('#resetInput').click(function () {
         $('#receivedSum').val("");
         $('#change').text("");
-    })
+    });
+
+    $('#printCustomerReceipt').click(function () {
+
+    });
+
+    $('#printKitchenReceipt').click(function () {
+
+    });
+
 }, false);

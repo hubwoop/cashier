@@ -55,13 +55,16 @@
     <br>
     <button id="printKitchenReceipt">Print Kitchen Receipt</button>
     <br>
-    <button id="closeInteraction">Next!</button>
+    <button id="closeInteraction" type="submit">Next!</button>
   </div>
 </div>
   <div id="rightRow">
-      <ol id="receipt"></ol>
-      <div id="sumRow">Sum: <span id="sum">0</span></div>
-      <button id="finishProcess">Finish</button>
+    <ol id="receipt"></ol>
+
+    <div id="customerRow">Customer: <span id="customer">{{ customer }}</span></div>
+    <div id="sumRow">Sum: <span id="sum">0</span></div>
+    <button id="finishProcess">Finish</button>
+    <button id="returnToAddItems">Add more Items</button>
   </div>
 </div>
 {% endblock %}
