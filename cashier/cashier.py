@@ -171,7 +171,7 @@ def print_receipt(data):
     if platform.system() == 'Windows':
         with open(app.config['PRINT_FILE']) as f:
             f.write(data)
-        os.startfile("C:/Users/TestFile.txt", "print")
+        os.startfile(app.config['PRINT_FILE'], "print")
     elif platform.system() == 'Linux':
         lpr = subprocess.Popen("/usr/bin/lpr", stdin=subprocess.PIPE)
         lpr.stdin.write(str.encode(data))
@@ -209,7 +209,7 @@ def print_kitchen_receipt():
     del receipt['sum']
     text = f"Bestellung #{customer_number%100}!\n"
     for item_id, value in receipt.items():
-        text = text + f"{value['amount']}x {value['title']}"
+        text = f"text\n{value['amount']}x {value['title']}"
     print_receipt(text)
     return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
@@ -222,7 +222,7 @@ def print_customer_receipt():
     del receipt['sum']
     text = f"Deine Nummer: {customer_number%100}\n"
     for item_id, value in receipt.items():
-        text = text + f"{value['amount']}x {value['title']}"
+        text = f"{text}\n{value['amount']}x {value['title']}"
     text = text + "\nSumme:" + receipt_sum + "€"
     print_receipt(text)
     return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
