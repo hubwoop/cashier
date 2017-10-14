@@ -35,6 +35,9 @@ function update_receipt_sum() {
     sum = sum.toFixed(2);
     $("#sum").text(sum);
     $("#finishSum").text(sum);
+    if($("#change").text()){
+
+    }
 
 }
 
@@ -103,6 +106,25 @@ function contrast() {
 
 }
 
+function evaluate_input(sumDisplay, change) {
+
+    let userInput = Number(sumDisplay.val().replace(",", "."));
+
+    if (isNaN(userInput)) {
+        change.css("color", "red");
+        change.text("NaN!");
+        throw "NaN";
+    }
+
+    let difference = (receipt_state['sum'] - userInput);
+    if (difference >= 0) {
+        change.css("color", "red")
+    } else {
+        change.css("color", "green")
+    }
+    change.text(difference.toFixed(2) + ' €');
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 
     contrast();
@@ -129,18 +151,31 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     $('#dialPad').find(':button').click(function () {
+
         console.log($(this));
         const attr = $(this).attr('data-number');
         const sumDisplay = $('#receivedSum');
+        const change = $('#change');
+
         if (typeof attr !== typeof undefined && attr !== false) {
-            console.log("a number!")
             sumDisplay.val( sumDisplay.val() + $(this).text());
         }
         else if ($(this).is('#decimalPoint')) {
             sumDisplay.val( sumDisplay.val() + $(this).text());
         }
+        else if ($(this).is('#evaluateInput')) {
+            try {
+                evaluate_input(sumDisplay, change);
+            } catch (e) {
+                sumDisplay.val("");
+                return false;
+            }
 
+        }
+    });
 
+    $('#resetInput').click(function () {
+        $('#receivedSum').val("");
+        $('#change').text("");
     })
-
 }, false);
