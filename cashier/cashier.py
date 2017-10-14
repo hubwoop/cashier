@@ -223,7 +223,7 @@ def print_customer_receipt():
     text = f"Deine Nummer: {customer_number%100}\n"
     for item_id, value in receipt.items():
         text = f"{text}\n{value['amount']}x {value['title']}"
-    text = text + "\nSumme:" + receipt_sum + "€"
+    text = f"{text}\nSumme: {receipt_sum} €"
     print_receipt(text)
     return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
