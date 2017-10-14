@@ -69,7 +69,7 @@ def init_db():
 @app.route('/')
 def show_items():
     db = get_db()
-    cur = db.execute('select id, title, price, image_link, color from items order by id desc')
+    cur = db.execute('SELECT id, title, price, image_link, color FROM items ORDER BY id DESC')
     items = cur.fetchall()
     return render_template('manage_items.html', items=items)
 
@@ -94,7 +94,7 @@ def add_item():
                 file.save(os.path.join(app.config['PATH_TO_ITEM_IMAGES'], filename))
             color = None
     db = get_db()
-    db.execute('insert into items (title, price, image_link, color) values (?, ?, ?, ?)',
+    db.execute('INSERT INTO items (title, price, image_link, color) VALUES (?, ?, ?, ?)',
                [request.form['title'], price, filename, color])
     db.commit()
     flash('New item was successfully added.')
@@ -113,7 +113,7 @@ def get_item(identifier):
     except ValueError:
         abort(400)
     db = get_db()
-    cur = db.execute('select id, title, price, image_link, color from items where id = (?)', [identifier])
+    cur = db.execute('SELECT id, title, price, image_link, color FROM items WHERE id = (?)', [identifier])
     item = cur.fetchone()
     if not item:
         abort(400)
@@ -130,7 +130,7 @@ def delete_item(identifier):
     if not session.get('logged_in'):
         abort(401)
     db = get_db()
-    db.execute('delete from items where id = (?)', [identifier])
+    db.execute('DELETE FROM items WHERE id = (?)', [identifier])
     db.commit()
     return redirect(url_for('show_items'))
 
@@ -161,7 +161,7 @@ def logout():
 def work_view():
     global customer_number
     db = get_db()
-    cur = db.execute('select id, title, price, image_link, color from items order by id desc')
+    cur = db.execute('SELECT id, title, price, image_link, color FROM items ORDER BY id DESC')
     items = cur.fetchall()
     customer_number += 1
     return render_template('work_view.html', items=items, customer=customer_number)
@@ -190,14 +190,14 @@ def add_transaction():
 
     receipt_sum = float(receipt['sum'])
     del receipt['sum']
-    cur = db.execute('insert into transactions (date, sum) values (?, ?)',
+    cur = db.execute('INSERT INTO transactions (date, sum) VALUES (?, ?)',
                      [str(datetime.now()), receipt_sum])
     transaction_id = cur.lastrowid
     db.commit()
 
     for item_id, value in receipt.items():
         for _ in itertools.repeat(None, value['amount']):
-            db.execute('insert into items_to_transactions (item, "transaction") values (?, ?)',
+            db.execute('INSERT INTO items_to_transactions (item, "transaction") VALUES (?, ?)',
                        [int(item_id), int(transaction_id)])
     db.commit()
     return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
@@ -208,9 +208,9 @@ def print_kitchen_receipt():
     global customer_number
     receipt = request.get_json(force=True)  # type: dict
     del receipt['sum']
-    text = f"Bestellung #{customer_number%100}!\n"
+    text = "Bestellung #" + str(customer_number % 100) + "\n"
     for item_id, value in receipt.items():
-        text = f"{text}\n{value['amount']}x {value['title']}"
+        text += "\n" + str(value['amount']) + "x " + str(value['title'])
     print_receipt(text)
     return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
@@ -221,10 +221,10 @@ def print_customer_receipt():
     receipt = request.get_json(force=True)  # type: dict
     receipt_sum = receipt['sum']
     del receipt['sum']
-    text = f"Deine Nummer: {customer_number%100}\n"
+    text = "Deine Nummer: " + str(customer_number % 100) + " \n"
     for item_id, value in receipt.items():
-        text = f"{text}\n{value['amount']}x {value['title']}"
-    text = f"{text}\nSumme: {receipt_sum} €"
+        text += "\n " + str(value['amount']) + "x" + str(value['title'])
+    text += "\nSumme: " + str(receipt_sum) + " €"
     print_receipt(text)
     return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
