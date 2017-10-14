@@ -12,7 +12,7 @@ create table items (
 drop table if exists transactions;
 create table transactions (
   id integer primary key autoincrement,
-  date integer not null,
+  date text not null,
   sum real not null
 );
 

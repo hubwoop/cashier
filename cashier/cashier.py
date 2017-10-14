@@ -3,9 +3,9 @@ import os
 import platform
 import sqlite3
 import subprocess
+from datetime import datetime
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 from werkzeug.utils import secure_filename
-from collections import namedtuple
 
 app = Flask(__name__)  # create the application instance :)
 app.config.from_object(__name__)  # load config from this file, cashier.py
@@ -177,8 +177,14 @@ def allowed_file(filename):
 @app.route('/add/transaction', methods=['POST'])
 def add_transaction():
     receipt = request.get_json(force=True)  # type: dict
-    for item_id in receipt.keys():
-        print(f"{item_id}: {receipt[item_id]}")
+    db = get_db()
+
+    for item_id, value in receipt.items():
+        print(f"{item_id}: {value}")
+        if item_id is 'sum':
+            db.execute('insert into transactions (date, sum) values (?, ?)',
+                       [str(datetime.now()), float(value)])
+    db.commit()
     return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
 
