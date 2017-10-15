@@ -208,10 +208,10 @@ def print_kitchen_receipt():
     global customer_number
     receipt = request.get_json(force=True)  # type: dict
     del receipt['sum']
-    text = "Bestellung #" + str(customer_number % 100) + "\n"
+    text = "Bestellung #" + str(customer_number % 100) + "-----------------------\n"
     for item_id, value in receipt.items():
         text += "\n" + str(value['amount']) + "x " + str(value['title'])
-    print_receipt(text)
+    print_receipt(text + "\n\n\n\n\n")
     return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
 
@@ -221,10 +221,10 @@ def print_customer_receipt():
     receipt = request.get_json(force=True)  # type: dict
     receipt_sum = receipt['sum']
     del receipt['sum']
-    text = "Deine Nummer: " + str(customer_number % 100) + " \n"
+    text = "\n\nDeine Nummer: - " + str(customer_number % 100) + " - \n\n\n\n-----------------------"
     for item_id, value in receipt.items():
         text += "\n " + str(value['amount']) + "x" + str(value['title'])
-    text += "\nSumme: " + str(receipt_sum) + " €"
+    text += "\n-----------------------\nSumme: " + str(receipt_sum) + " €"
     print_receipt(text)
     return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
 
