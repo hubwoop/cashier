@@ -20,7 +20,29 @@ h2 {
     font-size: 1.2em;
 }
 
-#receipt button{
+dl.inline-flex {
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    width: 300px; /* set the container width*/
+    overflow: visible;
+}
+
+dl.inline-flex dt {
+    flex: 0 0 50%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+dl.inline-flex dd {
+    flex: 0 0 50%;
+    margin-left: auto;
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+#receipt button {
     width: 100%;
     height: 2.5em;
     border: 1px solid darkred;

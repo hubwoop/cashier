@@ -52,10 +52,12 @@ function add_new_item_to_receipt(identifier) {
             + "<dt>Amount: <span data-ammount>1</span></dt>"
             + "<dt>Item: " + result['title'] + "</dt>"
             + "<dd>Price: <span data-price>" + result['price'].toFixed(2) + "</span>€</dd>"
-            + "<button data-remove>Remove</button></dl></li>"
         );
+        let remove_button = $("<button data-remove>Remove</button>");
+        receipt.append(remove_button);
+        receipt.append("</dl></li>");
 
-        receipt.on('click', "li[data-id='" + identifier + "']", function () {
+        receipt.on('click', remove_button, function () {
             delete receipt_state[identifier];
             $("[data-id=" + identifier + "]").remove();
             update_receipt_sum();
