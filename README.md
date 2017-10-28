@@ -1,5 +1,5 @@
 # cashier
-A simple cashier UI that runs in web-browsers
+A simple cashier UI that runs in web-browsers. The goal is to have a simple cashier UI that runs on any device with a browser. Kitchen and Customer receipts with order numbers should also be printable from the frontend.
 
 ## Getting Started
 
