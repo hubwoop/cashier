@@ -1,5 +1,5 @@
 # cashier
-A simple cashier UI that runs in web-browsers.
+A virtual cash register / lightweight POS for decives with web browsers.
 
 ## Getting Started
 
