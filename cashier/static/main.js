@@ -1,25 +1,11 @@
 let receipt_state = {"sum": 0};
 
-function already_listed_handler(identifier) {
-    if (receipt_state[identifier]) {
-
-        const receipt_item = $("li[data-id='" + identifier + "']");
-        receipt_state[identifier]['amount'] += 1;
-        const amount = receipt_state[identifier]['amount'];
-
-        receipt_item.find("[data-ammount]").text(amount);
-        const price = receipt_state[identifier]['price'];
-        const new_price = (amount * price).toFixed(2);
-
-        receipt_item.find("[data-price]").text(new_price);
-        update_receipt_sum();
-        return true;
-    }
-    return false;
-
+function item_already_listed(identifier) {
+    return receipt_state[identifier];
 }
 
 function update_receipt_sum() {
+
     let sum = 0;
     Object.keys(receipt_state).forEach(function (key, index) {
         if (key === "sum") {
@@ -52,12 +38,10 @@ function add_new_item_to_receipt(identifier) {
             + "<dt>Amount: <span data-ammount>1</span></dt>"
             + "<dt>Item: " + result['title'] + "</dt>"
             + "<dd>Price: <span data-price>" + result['price'].toFixed(2) + "</span>€</dd>"
+            + "<button data-remove>Remove</button></dl></li>"
         );
-        let remove_button = $("<button data-remove>Remove</button>");
-        receipt.append(remove_button);
-        receipt.append("</dl></li>");
 
-        receipt.on('click', remove_button, function () {
+        receipt.on('click', "li[data-id='" + identifier + "']", function () {
             delete receipt_state[identifier];
             $("[data-id=" + identifier + "]").remove();
             update_receipt_sum();
@@ -71,9 +55,25 @@ function add_new_item_to_receipt(identifier) {
 }
 
 function add_to_receipt(identifier) {
-    if (!already_listed_handler(identifier)) {
+
+    function update_receipt_display() {
+        const new_amount = receipt_state[identifier]['amount'];
+        const receipt_item = $("li[data-id='" + identifier + "']");
+        receipt_item.find("[data-ammount]").text(new_amount);
+        const price = receipt_state[identifier]['price'];
+        const new_price = (new_amount * price).toFixed(2);
+        receipt_item.find("[data-price]").text(new_price);
+    }
+
+    if (item_already_listed(identifier)) {
+        receipt_state[identifier]['amount'] += 1;
+        update_receipt_display();
+        update_receipt_sum();
+    }
+    else {
         add_new_item_to_receipt(identifier)
     }
+
 }
 
 /*
@@ -133,13 +133,13 @@ function evaluate_input() {
 document.addEventListener('DOMContentLoaded', function () {
 
     contrast();
-    $('.itemTitle').click(function () {
+    $('.itemTitle').on('click', function () {
 
         add_to_receipt(Number($(this).attr('id')))
 
     });
 
-    $('#finishProcess').click(function () {
+    $('#finishProcess').on('click', function () {
 
         $(".items").hide();
         $("#finishProcess").hide();
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 
-    $('#closeInteraction').click(function () {
+    $('#closeInteraction').on('click', function () {
         const state = JSON.stringify(receipt_state);
         console.log(state);
         $.post("/add/transaction", state, function () {
@@ -156,14 +156,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    $('#returnToAddItems').click(function () {
+    $('#returnToAddItems').on('click', function () {
         $("#finishProcessTab").hide();
         $("#returnToAddItems").hide();
         $("#finishProcess").show();
         $(".items").show();
     });
 
-    $('#dialPad').find(':button').click(function () {
+    $('#dialPad').find(':button').on('click', function () {
 
         console.log($(this));
         const attr = $(this).attr('data-number');
@@ -186,16 +186,16 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    $('#resetInput').click(function () {
+    $('#resetInput').on('click', function () {
         $('#receivedSum').val("");
         $('#change').text("");
     });
 
-    $('#printCustomerReceipt').click(function () {
+    $('#printCustomerReceipt').on('click', function () {
         $.post("/print/customer", JSON.stringify(receipt_state));
     });
 
-    $('#printKitchenReceipt').click(function () {
+    $('#printKitchenReceipt').on('click', function () {
         $.post("/print/kitchen", JSON.stringify(receipt_state));
     });
 

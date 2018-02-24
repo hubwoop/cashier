@@ -80,25 +80,34 @@ def add_item():
         abort(401)
     price = evaluate_price(request.form['price'])
     color = request.form['color']
-    filename = None
-    # check if the post request has the file part
-    if 'file' in request.files:
-        file = request.files['file']
-        # check if the file part contains a value and is allowed
-        if file.filename != '' and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            try:
-                file.save(os.path.join(app.config['PATH_TO_ITEM_IMAGES'], filename))
-            except FileNotFoundError:
-                os.mkdir(os.path.join(app.root_path, 'static', 'images'))
-                file.save(os.path.join(app.config['PATH_TO_ITEM_IMAGES'], filename))
-            color = None
+    filename = file_upload_handler()
     db = get_db()
     db.execute('INSERT INTO items (title, price, image_link, color) VALUES (?, ?, ?, ?)',
                [request.form['title'], price, filename, color])
     db.commit()
     flash('New item was successfully added.')
     return redirect(url_for('show_items'))
+
+
+def file_upload_handler():
+    filename = None
+    # check if the post request has the file part
+    if 'file' in request.files:
+        file = request.files['file']
+        # check if the file part contains a value and is allowed
+        if file.filename != '' and allowed_file(file.filename):
+            filename = save_file_to_disk(file)
+    return filename
+
+
+def save_file_to_disk(file):
+    filename = secure_filename(file.filename)
+    try:
+        file.save(os.path.join(app.config['PATH_TO_ITEM_IMAGES'], filename))
+    except FileNotFoundError:
+        os.mkdir(os.path.join(app.root_path, 'static', 'images'))
+        file.save(os.path.join(app.config['PATH_TO_ITEM_IMAGES'], filename))
+    return filename
 
 
 def evaluate_price(price: str):

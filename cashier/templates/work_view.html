@@ -18,11 +18,8 @@
     {% else %}
     <div><em>Unbelievable. No items here so far</em></div>
     {% endfor %}
-  {% else %}
-    <em>Not logged in.</em>
-  {% endif %}
     </div>
-<div id="finishProcessTab">
+    <div id="finishProcessTab">
   <div id="finishProcessTabTitle">
     To Pay: <span id="finishSum">0</span>
   </div>
@@ -66,5 +63,10 @@
     <button id="finishProcess">Finish</button>
     <button id="returnToAddItems">Add more Items</button>
   </div>
+  {% else %}
+    <em>Not logged in.</em>
+    </div>
+  {% endif %}
+
 </div>
 {% endblock %}
