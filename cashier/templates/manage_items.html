@@ -4,17 +4,16 @@
     <form action="{{ url_for('add_item') }}" method=post class=add-entry enctype=multipart/form-data>
       <dl>
         <dt>Title:
-        <dd><input size=30 name=title>
+        <dd><input size=30 name=title title="title">
         <dt>Price:
-        <dd><input name=price size=30>
+        <dd><input name=price size=30 title="price">
         <dt>Image Link:
         <dd><input type=file name=file size=30>
         <dt>Color:
-        <dd><input type=color name=color size=30 value="#ffffff">
+        <dd><input type=color name=color size=30 value="#ffffff" title="color">
         <dd><input type=submit value=Add>
       </dl>
     </form>
-  {% endif %}
 
   <ul class=entries>
   {% for item in items %}
@@ -36,4 +35,7 @@
     <em>Unbelievable.  No items here so far</em>
   {% endfor %}
   </ul>
+  {% else %}
+    <em>Not logged in.</em>
+  {% endif %}
 {% endblock %}

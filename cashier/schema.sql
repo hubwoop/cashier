@@ -1,5 +1,13 @@
 PRAGMA foreign_keys = ON;
 
+drop table if exists items_to_transactions;
+create table items_to_transactions (
+  item integer not null,
+  'transaction' integer not null,
+  foreign key(item) references items(id),
+  foreign key('transaction') references transactions(id)
+);
+
 drop table if exists items;
 create table items (
   id integer primary key autoincrement,
@@ -16,10 +24,3 @@ create table transactions (
   sum real not null
 );
 
-drop table if exists items_to_transactions;
-create table items_to_transactions (
-  item integer not null,
-  'transaction' integer not null,
-  foreign key(item) references items(id),
-  foreign key('transaction') references transactions(id)
-);
