@@ -5,6 +5,6 @@ setup(
     packages=['cashier'],
     include_package_data=True,
     install_requires=[
-        'cashier',
+        'flask>=3.0',
     ],
 )

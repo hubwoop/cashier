@@ -1,16 +1,31 @@
 # cashier
 A virtual cash register / lightweight POS for devices with web browsers.
 
-## Getting Started
+> **Local use only.** This app is designed to run on a local network and must not be exposed to the internet.
 
-- Install/Have python3.6 and optionally virtualenv
-- Clone repository
-- Create and activate a virtualenv
-- Install requirements: ```pip install -r /path/to/requirements.txt```
-- Install cashier. Run in project root: ```pip install --editable .```
-- Export environment variables: ```FLASK_APP=cashier```, ```FLASK_DEBUG=true```
-- Create DB: ```flask initdb```
-- ```flask run```
+## Install
+
+```sh
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+pip install --editable .
+```
+
+## Run
+
+```sh
+export FLASK_APP=cashier
+flask initdb   # first time only
+flask run
+```
+
+## Test
+
+```sh
+pip install pytest
+python -m pytest tests/
+```
 
 ## License
 

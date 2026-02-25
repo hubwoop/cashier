@@ -29,7 +29,11 @@
         <dt>Color
         <dd>{{ item.color|safe }}</dd>
         <dt>Delete
-        <dd><a href="{{ url_for('delete_item', identifier=item.id) }}">Delete</a></dd>
+        <dd>
+          <form action="{{ url_for('delete_item', identifier=item.id) }}" method="post" style="display:inline">
+            <button type="submit">Delete
+          </form>
+        </dd>
       </dl>
   {% else %}
     <em>Unbelievable.  No items here so far</em>
