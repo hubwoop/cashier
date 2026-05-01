@@ -29,7 +29,6 @@ app.config.update(dict(
 # And override config from an environment variable...
 # Simply define the environment variable CASHIER_SETTINGS that points to a config file to be loaded.
 app.config.from_envvar('CASHIER_SETTINGS', silent=True)
-customer_number = 0
 
 
 class NewItem(NamedTuple):
@@ -308,13 +307,18 @@ def init_db():
 
 
 def get_customer_number() -> int:
-    global customer_number
-    return customer_number
+    db = get_db()
+    cur = db.execute('select value from state where key = ?', ['customer_number'])
+    row = cur.fetchone()
+    if row:
+        return row[0]
+    return 0
 
 
 def increase_customer_number_by(integer: int):
-    global customer_number
-    customer_number += integer
+    db = get_db()
+    db.execute('update state set value = value + ? where key = ?', [integer, 'customer_number'])
+    db.commit()
 
 
 if __name__ == '__main__':
