@@ -184,9 +184,9 @@ def add_transaction():
 
 
 def process_receipt(receipt: dict):
-    receipt_sum = float(receipt['sum'])
-    del receipt['sum']
-    return receipt, receipt_sum
+    receipt_copy = dict(receipt)
+    receipt_sum = float(receipt_copy.pop('sum'))
+    return receipt_copy, receipt_sum
 
 
 def store_transaction(receipt_sum: float) -> int:
@@ -210,8 +210,8 @@ def map_items_to_transaction(receipt: dict, transaction_id: int) -> None:
 @app.route('/print/kitchen', methods=['POST'])
 @login_required
 def print_kitchen_receipt():
-    receipt = request.get_json(force=True)  # type: dict
-    del receipt['sum']
+    receipt = dict(request.get_json(force=True))  # type: dict
+    receipt.pop('sum', None)
     text = build_kitchen_receipt(receipt)
     print_receipt(text + "\n\n\n\n\n")
     return json.dumps({'success': True}), 200, {'ContentType': 'application/json'}
@@ -233,9 +233,8 @@ def print_customer_receipt():
 
 
 def prepare_receipt():
-    receipt = request.get_json(force=True)  # type: dict
-    receipt_sum = float(receipt['sum'])
-    del receipt['sum']
+    receipt = dict(request.get_json(force=True))  # type: dict
+    receipt_sum = float(receipt.pop('sum'))
     return receipt, receipt_sum
 
 
