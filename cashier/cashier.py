@@ -200,10 +200,12 @@ def store_transaction(receipt_sum: float) -> int:
 
 def map_items_to_transaction(receipt: dict, transaction_id: int) -> None:
     db = get_db()
-    for item_id, value in receipt.items():
-        for _ in itertools.repeat(None, value['amount']):
-            db.execute('insert into items_to_transactions (item, "transaction") values (?, ?)',
-                       [int(item_id), transaction_id])
+    params = [
+        (int(item_id), transaction_id)
+        for item_id, value in receipt.items()
+        for _ in itertools.repeat(None, value['amount'])
+    ]
+    db.executemany('insert into items_to_transactions (item, "transaction") values (?, ?)', params)
     db.commit()
 
 
