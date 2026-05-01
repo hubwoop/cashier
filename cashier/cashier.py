@@ -295,9 +295,10 @@ def connect_db():
 
 
 @app.teardown_appcontext
-def close_db(error):
-    if hasattr(g, 'sqlite_db'):
-        g.sqlite_db.close()
+def close_db(error=None):
+    db = g.pop('sqlite_db', None)
+    if db is not None:
+        db.close()
 
 
 def init_db():
