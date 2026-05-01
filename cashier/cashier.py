@@ -317,7 +317,7 @@ def get_customer_number() -> int:
 
 def increase_customer_number_by(integer: int):
     db = get_db()
-    db.execute('update state set value = value + ? where key = ?', [integer, 'customer_number'])
+    db.execute('update state set value = (value + ?) % 999 where key = ?', [integer, 'customer_number'])
     db.commit()
 
 
