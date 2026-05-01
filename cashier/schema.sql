@@ -24,3 +24,11 @@ create table transactions (
   sum real not null
 );
 
+
+drop table if exists state;
+create table state (
+  key text primary key,
+  value integer not null
+);
+
+insert into state (key, value) values ('customer_number', 0);
